@@ -7,6 +7,15 @@ import java.util.List;
 
 public class AddTwoNumbers {
     /*
+    You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+    You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+    Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+    Output: 7 -> 0 -> 8
+     */
+
+    /*
         首先把链表存入数组，
         然后两个数组按照下标，递增相加，和保存在新的数组里，同时要注意进位
         最后再把结果数组转换回链表就可以了
