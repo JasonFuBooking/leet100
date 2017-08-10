@@ -43,4 +43,13 @@ public class SingleNumber {
         return 0;
     }
 
+    //最佳算法
+    private int singleNumber2(int[] nums) {
+        int result = 0;
+        for(int i : nums) {
+            result ^= i;
+        }
+        return result;
+    }
+
 }
