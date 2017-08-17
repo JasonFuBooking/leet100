@@ -20,6 +20,14 @@ public class ListNode {
         return list.get(0);
     }
 
+    public static ListNode get(ListNode node, int index) {
+        ListNode head = node;
+        for (int i = 0; i < index; ++i) {
+            head = head.next;
+        }
+        return head;
+    }
+
     @Override
     public boolean equals(Object y) {
         if (y == this) return true;
