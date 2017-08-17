@@ -9,6 +9,7 @@ public class ListNode {
     public ListNode(int x) { val = x; }
 
     public static ListNode createListFrom(int[] array) {
+        if (array.length == 0) return null;
         List<ListNode> list = new ArrayList<>();
         for (int i : array) {
             list.add(new ListNode(i));
