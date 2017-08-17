@@ -39,4 +39,14 @@ public class TreeNode {
         node2right.right = node3right;
         return node1;
     }
+
+    public static TreeNode createTree3() {
+        TreeNode node1 = new TreeNode(1);
+        TreeNode node1right = new TreeNode(2);
+        TreeNode node2right = new TreeNode(3);
+
+        node1.right = node1right;
+        node1right.right = node2right;
+        return node1;
+    }
 }
