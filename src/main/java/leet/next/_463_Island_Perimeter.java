@@ -13,33 +13,33 @@ package leet.next;
  Answer: 16
  Explanation: The perimeter is the 16 yellow stripes in the image below:
 
+ */
 
+/*
+这道题看着很唬人其实很简单。逐个数1的四边即可
  */
 public class _463_Island_Perimeter {
     public int islandPerimeter(int[][] grid) {
-        return 0;
-    }
-}
-
-/*
-loop over the matrix and count the number of islands;
-if the current dot is an island, count if it has any right neighbour or down neighbour;
-the result is islands * 4 - neighbours * 2
-public class Solution {
-    public int islandPerimeter(int[][] grid) {
-        int islands = 0, neighbours = 0;
-
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
+        int sum = 0;
+        for (int i = 0; i < grid.length; ++i) {
+            int[] row = grid[i];
+            for (int j = 0; j < row.length; ++j) {
                 if (grid[i][j] == 1) {
-                    islands++; // count islands
-                    if (i < grid.length - 1 && grid[i + 1][j] == 1) neighbours++; // count down neighbours
-                    if (j < grid[i].length - 1 && grid[i][j + 1] == 1) neighbours++; // count right neighbours
+                    sum += (calculateSide(i - 1, j, grid.length, row.length, grid) +
+                            calculateSide(i + 1, j,  grid.length, row.length, grid) +
+                            calculateSide(i, j - 1,  grid.length, row.length, grid) +
+                            calculateSide(i, j + 1,  grid.length, row.length, grid));
                 }
             }
         }
+        return sum;
+    }
 
-        return islands * 4 - neighbours * 2;
+    private int calculateSide(int i, int j, int maxI, int maxJ, int[][] grid) {
+        if (i < 0 || j < 0 || i > maxI - 1 || j > maxJ - 1) {
+            return 1;
+        }
+        if (grid[i][j] == 0) return 1;
+        return 0;
     }
 }
- */
