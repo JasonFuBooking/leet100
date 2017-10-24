@@ -53,6 +53,8 @@ import java.util.List;
 "12 1 2" 与 "2 1 2" 第二个的确是第一个的字串，错了
 "#12 #1 #2" "#2 #1 #2" 这样就对了
 
+3. 判断字符串子串可以用indexOf方法！！！！
+
  */
 public class _572_Subtree_of_Another_Tree {
     public boolean isSubtree(TreeNode s, TreeNode t) {
