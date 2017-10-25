@@ -2,8 +2,12 @@ package leet.next;
 
 import util.TreeNode;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 /**
- You are given a binary tree in which each node contains an integer value.
+ You are given a binary tree in which each originNode contains an integer value.
 
  Find the number of paths that sum to a given value.
 
@@ -29,65 +33,85 @@ import util.TreeNode;
  2.  5 -> 2 -> 1
  3. -3 -> 11
  */
-public class _437_Path_Sum_III {
-    public int pathSum(TreeNode root, int sum) {
-        return 0;
-    }
-}
 
 /*
-So the idea is similar as Two sum, using HashMap to store ( key : the prefix sum, value : how many ways get to this prefix sum) , and whenever reach a node, we check if prefix sum - target exists in hashmap or not, if it does, we added up the ways of prefix sum - target into res.
-For instance : in one path we have 1,2,-1,-1,2, then the prefix sum will be: 1, 3, 2, 1, 3, let's say we want to find target sum is 2, then we will have{2}, {1,2,-1}, {2,-1,-1,2} and {2}ways.
 
-I used global variable count, but obviously we can avoid global variable by passing the count from bottom up. The time complexity is O(n). This is my first post in discuss, open to any improvement or criticism. :)
+思路其实很简单，就是实现起来麻烦了点。
+一句话：通过改装后的按层次遍历，来逐个计算每个节点和父节点的所有距离
 
-    public int pathSum(TreeNode root, int sum) {
-        HashMap<Integer, Integer> preSum = new HashMap();
-        preSum.put(0,1);
-        helper(root, 0, sum, preSum);
-        return count;
-    }
-    int count = 0;
-    public void helper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
-        if (root == null) {
-            return;
-        }
+1. 用Node来包装原来的节点，为每个节点增加一个list，保存当前值+当前值加上上一级节点所有的values. 实际就是记录了当前节点到他的所有父节点的距离。
+按层次遍历的话，子节点的计算可以基于父节点的values，避免了重复计算
+2. 通过按层次遍历，来一次计算每个节点的values
+3. 在计算的过程中如果有value的值正好等于sum, count数就加一
 
-        currSum += root.val;
-
-        if (preSum.containsKey(currSum - target)) {
-            count += preSum.get(currSum - target);
-        }
-
-        if (!preSum.containsKey(currSum)) {
-            preSum.put(currSum, 1);
-        } else {
-            preSum.put(currSum, preSum.get(currSum)+1);
-        }
-
-        helper(root.left, currSum, target, preSum);
-        helper(root.right, currSum, target, preSum);
-        preSum.put(currSum, preSum.get(sum) - 1);
-    }
-Thanks for your advice, @StefanPochmann . Here is the modified version, concise and shorter:
-
-    public int pathSum(TreeNode root, int sum) {
-        HashMap<Integer, Integer> preSum = new HashMap();
-        preSum.put(0,1);
-        return helper(root, 0, sum, preSum);
-    }
-
-    public int helper(TreeNode root, int currSum, int target, HashMap<Integer, Integer> preSum) {
-        if (root == null) {
-            return 0;
-        }
-
-        currSum += root.val;
-        int res = preSum.getOrDefault(currSum - target, 0);
-        preSum.put(currSum, preSum.getOrDefault(currSum, 0) + 1);
-
-        res += helper(root.left, currSum, target, preSum) + helper(root.right, currSum, target, preSum);
-        preSum.put(currSum, preSum.get(currSum) - 1);
-        return res;
-    }
  */
+public class _437_Path_Sum_III {
+    class Count {
+        int value;
+        void increase() {
+            ++value;
+        }
+    }
+    class Node {
+        TreeNode originNode;
+        List<Integer> values = new LinkedList<>();
+
+        Node(TreeNode node, Count count, int sum) {
+            this.originNode = node;
+            values.add(node.val);
+            if (node.val == sum) count.increase();
+        }
+
+        TreeNode getLeft() {
+            return originNode.left;
+        }
+
+        void addParentValues(Node parent, Count count, int sum) {
+            for (Integer value : parent.values) {
+                int newValue = value + originNode.val;
+                if (newValue == sum) count.increase();
+                values.add(newValue);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "originNode=" + originNode.val +
+                    ", values=" + values +
+                    '}';
+        }
+    }
+    public int pathSum(TreeNode root, int sum) {
+        if (root == null) return 0;
+
+        Count count = new Count();
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(root, count, sum));
+
+        while (!queue.isEmpty()) {
+            List<Node> thisLevel = new LinkedList<>();
+            while (!queue.isEmpty()) {
+                thisLevel.add(queue.poll());
+            }
+
+            List<Node> nextLevel = new LinkedList<>();
+            for (Node node : thisLevel) {
+                if (node.originNode.left != null) {
+                    Node left = new Node(node.originNode.left, count, sum);
+                    left.addParentValues(node, count, sum);
+                    nextLevel.add(left);
+                }
+
+                if (node.originNode.right != null) {
+                    Node right = new Node(node.originNode.right, count, sum);
+                    right.addParentValues(node, count, sum);
+                    nextLevel.add(right);
+                }
+            }
+            queue.addAll(nextLevel);
+        }
+
+        return count.value;
+    }
+}
