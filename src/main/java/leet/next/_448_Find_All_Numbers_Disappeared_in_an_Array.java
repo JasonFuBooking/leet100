@@ -1,5 +1,6 @@
 package leet.next;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,31 +18,31 @@ import java.util.List;
  Output:
  [5,6]
  */
-public class _448_Find_All_Numbers_Disappeared_in_an_Array {
-    public List<Integer> findDisappearedNumbers(int[] nums) {
-        return null;
-    }
-}
-
 
 /*
-The basic idea is that we iterate through the input array and mark elements as negative using nums[nums[i] -1] = -nums[nums[i]-1]. In this way all the numbers that we have seen will be marked as negative. In the second iteration, if a value is not marked as negative, it implies we have never seen that index before, so just add it to the return list.
+这道题当然有一个最直接的解法，就是建立一个辅助数组，遍历一遍就可以了，但是空间复杂度是n
+如果要做到不借助额外的辅助空间。在原数组上寻找的话。
+这里借助了负号，最关键的是34行，把当前值映射到index,把该index的值转换成负数，表明该值已经存在。
+Math.abs又保证了对当前值的比较不会出错，做到了一个数组两用
 
-    public List<Integer> findDisappearedNumbers(int[] nums) {
-        List<Integer> ret = new ArrayList<Integer>();
-
-        for(int i = 0; i < nums.length; i++) {
-            int val = Math.abs(nums[i]) - 1;
-            if(nums[val] > 0) {
-                nums[val] = -nums[val];
-            }
-        }
-
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] > 0) {
-                ret.add(i+1);
-            }
-        }
-        return ret;
-    }
  */
+
+public class _448_Find_All_Numbers_Disappeared_in_an_Array {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < nums.length; ++i) {
+            int value = Math.abs(nums[i]) - 1;
+            if (nums[value] > 0) {
+                nums[value] *= -1;
+            }
+        }
+
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] > 0) {
+                list.add(i + 1);
+            }
+        }
+
+        return list;
+    }
+}
