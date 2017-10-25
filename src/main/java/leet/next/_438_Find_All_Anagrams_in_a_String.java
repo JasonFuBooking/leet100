@@ -1,5 +1,6 @@
 package leet.next;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,11 +31,43 @@ import java.util.List;
 
  Explanation:
  The substring with start index = 0 is "ab", which is an anagram of "ab".
- The substring with start index = 1 is "ba", which is an anagram of "ab".
+ The/ substring with start index = 1 is "ba", which is an anagram of "ab".
  The substring with start index = 2 is "ab", which is an anagram of "ab".
+ */
+
+/*
+思路，其实我这里还是用了暴力搜索的方法，勉强通过测试。
+讨论里有很多sliding window的方法，可以看一看
  */
 public class _438_Find_All_Anagrams_in_a_String {
     public List<Integer> findAnagrams(String s, String p) {
-        return null;
+        List<Integer> results = new ArrayList<>();
+        int[] chars = new int[26];
+        for (int i = 0; i < s.length(); ++i) {
+            if (i + p.length() > s.length()) continue;
+            int indexSource = i;
+
+            for (int j = 0; j < p.length(); ++j) {
+                ++chars[s.charAt(indexSource) - 'a'];
+                ++indexSource;
+            }
+            for (int j = 0; j < p.length(); ++j) {
+                --chars[p.charAt(j) - 'a'];
+            }
+
+            boolean allZero = true;
+            for (int count : chars) {
+                if (count != 0) {
+                    allZero = false;
+                }
+            }
+            if (allZero) {
+                results.add(i);
+            }
+            for (int k = 0; k < chars.length; ++k) {
+                chars[k] = 0;
+            }
+        }
+        return results;
     }
 }
