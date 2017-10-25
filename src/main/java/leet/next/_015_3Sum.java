@@ -1,6 +1,6 @@
 package leet.next;
 
-import java.util.List;
+import java.util.*;
 
 /**
  Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
@@ -16,10 +16,72 @@ import java.util.List;
  ]
  */
 public class _015_3Sum {
+
     public List<List<Integer>> threeSum(int[] nums) {
-        return null;
+        List<List<Integer>> results = new LinkedList<>();
+        Arrays.sort(nums);
+
+        Set<String> hash = new HashSet<>();
+        for (int i = 0; i < nums.length - 2; ++i) {
+            int value = -nums[i];
+            int j = i + 1, k = nums.length - 1;
+            while (j < k) {
+                int sum = nums[j] + nums[k];
+                if (sum == value) {
+                    String hashKey = String.valueOf(nums[i]) + nums[j] + nums[k];
+                    if (hash.contains(hashKey)) {
+                        ++j;
+                        --k;
+                        continue;
+                    }
+                    hash.add(hashKey);
+                    List<Integer> list = new ArrayList<>(3);
+                    list.add(nums[i]);
+                    list.add(nums[j]);
+                    list.add(nums[k]);
+                    results.add(list);
+                    ++j;
+                    --k;
+                } else if (sum > value) {
+                    --k;
+                } else {
+                    ++j;
+                }
+            }
+        }
+        return results;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
