@@ -1,6 +1,9 @@
 package leet.next;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
@@ -15,31 +18,27 @@ import java.util.List;
      "()()()"
  ]
  */
-public class _022_GenerateParentheses {
-    public List<String> generateParenthesis(int n) {
-        return null;
-    }
-}
-
 
 /*
- public List<String> generateParenthesis(int n) {
-        List<String> list = new ArrayList<String>();
-        backtrack(list, "", 0, 0, n);
-        return list;
-    }
-
-    public void backtrack(List<String> list, String str, int open, int close, int max){
-
-        if(str.length() == max*2){
-            list.add(str);
-            return;
+这里用了dp的思路
+这一次的结果集，就是把一个新的()插入到上一次的所有结果集的所有位置
+同时注意去重即可
+ */
+public class _022_GenerateParentheses {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        result.add("()");
+        for (int i = 2; i <= n; ++i) {
+            Set<String> set = new HashSet<>();
+            for (String parentheses : result) {
+                for (int j = 0; j < parentheses.length(); ++j) {
+                    set.add(parentheses.substring(0, j) + "()" + parentheses.substring(j, parentheses.length()));
+                }
+            }
+            result.clear();
+            result.addAll(set);
         }
 
-        if(open < max)
-            backtrack(list, str+"(", open+1, close, max);
-        if(close < open)
-            backtrack(list, str+")", open, close+1, max);
+        return result;
     }
-The idea here is to only add '(' and ')' that we know will guarantee us a solution (instead of adding 1 too many close). Once we add a '(' we will then discard it and try a ')' which can only close a valid '('. Each of these steps are recursively called.
- */
+}
