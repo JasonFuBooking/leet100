@@ -41,13 +41,13 @@ public class LongestSubstring {
             if (i == j) {
                 max = getMax(max, 1);
             }
-            while (j < s.length() && !set.contains(s.charAt(j))) {
+            while (j < s.length() && !set.contains(s.charAt(j))) { //每移动一次都要检查一下
                 set.add(s.charAt(j));
                 queue.add(s.charAt(j));
                 ++j;
             }
             max = getMax(max, set.size());
-            while (j < s.length() && i < s.length() && set.contains(s.charAt(j))) {
+            while (j < s.length() && i < s.length() && set.contains(s.charAt(j))) { //每移动一次都要检查一下
                 ++i;
                 set.remove(queue.poll());
             }
