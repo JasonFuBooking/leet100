@@ -14,6 +14,17 @@ package leet.next;
  */
 public class _283_Move_Zeroes {
     public void moveZeroes(int[] nums) {
-
+        int i = 0, j = 0;
+        while (i < nums.length && j < nums.length) {
+            if (nums[i] == 0) {
+                j = i + 1;
+                while (j < nums.length && nums[j] == 0) ++j;
+                if (j > nums.length - 1) break;
+                int number = nums[j];
+                nums[j] = nums[i];
+                nums[i] = number;
+            }
+            ++i;
+        }
     }
 }
