@@ -8,35 +8,38 @@ package leet.next;
  Credits:
  Special thanks to @ifanchu for adding this problem and creating all test cases. Also thanks to @ts for adding additional test cases.
  */
-public class _198_House_Robber {
-    public int rob(int[] nums) {
-        return 0;
-    }
-}
-
 
 /*
-Java O(n) solution, space O(1)
-public int rob(int[] num) {
-    int[][] dp = new int[num.length + 1][2];
-    for (int i = 1; i <= num.length; i++) {
-        dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
-        dp[i][1] = num[i - 1] + dp[i - 1][0];
-    }
-    return Math.max(dp[num.length][0], dp[num.length][1]);
-}
-dp[i][1] means we rob the current house and dp[i][0] means we don't,
+这道题一看就是dp，
+但是要注意dp的思路
+1. 找出递推公式
+2. 找的时候不是从整体来看的，而是从小到大的递推，比如只有一个元素的情况，加一个元素到两个元素的情况，在加一个元素呢？
+通常需要一个辅助数组来保存前n-1步的最优解
 
-so it is easy to convert this to O(1) space
+这里来说
+只有一个元素，那肯定是选择当前元素
+有两个元素，两个里边取大的
+有三个元素，因为不能取相邻元素，那就要看：
+1. 如果取当前元素，那么最优解，就是当前元素的值加上，dp[n-2]
+2, 如果不取当前元素，最优解就是dp[n-1]
 
-public int rob(int[] num) {
-    int prevNo = 0;
-    int prevYes = 0;
-    for (int n : num) {
-        int temp = prevNo;
-        prevNo = Math.max(prevNo, prevYes);
-        prevYes = n + temp;
-    }
-    return Math.max(prevNo, prevYes);
-}
+dp[n] = max(nums[i] + dp[n-2], dp[n-1])
+找到递推公式就好办了
+
  */
+public class _198_House_Robber {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return Math.max(nums[0], nums[1]);
+
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+
+        for (int i = 2; i < nums.length; ++i) {
+            dp[i] = Math.max(nums[i] + dp[i - 2], dp[i - 1]);
+        }
+        return dp[dp.length - 1];
+    }
+}
