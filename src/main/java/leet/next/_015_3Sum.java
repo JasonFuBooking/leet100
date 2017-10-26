@@ -15,6 +15,13 @@ import java.util.*;
      [-1, -1, 2]
  ]
  */
+
+/*
+虽然是仿照2sum，但是还是有些需要注意的技巧。
+1. 先排序
+2. 从头开始遍历，选定当前元素后，在其后的数组部分设置两个指针，从两头向中间步进，并计算和
+3. 注意滤掉重复元素: line38
+ */
 public class _015_3Sum {
 
     public List<List<Integer>> threeSum(int[] nums) {

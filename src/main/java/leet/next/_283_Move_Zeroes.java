@@ -10,7 +10,13 @@ package leet.next;
  Minimize the total number of operations.
  Credits:
  Special thanks to @jianchao.li.fighter for adding this problem and creating all test cases.
+ */
 
+/*
+思路：
+一开始是两个指针，一个在头一个在尾，向中间遍历。但是这样不能保持顺序
+还是从头遍历，遇到0就新建另一个指针，从当前位置之后开始寻找非零数，并交换
+这样就可以保持顺序
  */
 public class _283_Move_Zeroes {
     public void moveZeroes(int[] nums) {
