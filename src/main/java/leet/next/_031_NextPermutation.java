@@ -1,5 +1,7 @@
 package leet.next;
 
+import java.util.Arrays;
+
 /**
  Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 
@@ -12,60 +14,67 @@ package leet.next;
  3,2,1 → 1,2,3
  1,1,5 → 1,5,1
  */
-public class _031_NextPermutation {
-    public void nextPermutation(int[] nums) {
-
-    }
-}
-
 
 /*
-My idea is for an array:
+这道题最最关键的就是要读懂题目的意思，我翻译一下
+1. 把当前数组中的数字求全排列，得到所有排列的集合
+2. 对这个集合按照数字字面大小从小到大排序
+3. 求当前排列相邻右边的那个排列，也就是只比他大一点点的那个
+例如：1，2，3
+1. 所有排列：（1，2，3） （1，3，2）（3，1，2）（3，2，1）（2，1，3）（2，3，1）
+2. 排序：123，132，213，231，312，321
+3. 于是1，2，3的下一个应该是132
 
-Start from its last element, traverse backward to find the first one with index i that satisfy num[i-1] < num[i]. So, elements from num[i] to num[n-1] is reversely sorted.
-To find the next permutation, we have to swap some numbers at different positions, to minimize the increased amount, we have to make the highest changed position as high as possible. Notice that index larger than or equal to i is not possible as num[i,n-1] is reversely sorted. So, we want to increase the number at index i-1, clearly, swap it with the smallest number between num[i,n-1] that is larger than num[i-1]. For example, original number is 121543321, we want to swap the '1' at position 2 with '2' at position 7.
-The last step is to make the remaining higher position part as small as possible, we just have to reversely sort the num[i,n-1]
-The following is my code:
-
-public void nextPermutation(int[] num) {
-    int n=num.length;
-    if(n<2)
-        return;
-    int index=n-1;
-    while(index>0){
-        if(num[index-1]<num[index])
-            break;
-        index--;
-    }
-    if(index==0){
-        reverseSort(num,0,n-1);
-        return;
-    }
-    else{
-        int val=num[index-1];
-        int j=n-1;
-        while(j>=index){
-            if(num[j]>val)
-                break;
-            j--;
-        }
-        swap(num,j,index-1);
-        reverseSort(num,index,n-1);
-        return;
-    }
-}
-
-public void swap(int[] num, int i, int j){
-    int temp=0;
-    temp=num[i];
-    num[i]=num[j];
-    num[j]=temp;
-}
-
-public void reverseSort(int[] num, int start, int end){
-    if(start>end)
-        return;
-    for(int i=start;i<=(end+start)/2;i++)
-        swap(num,i,start+end-i);
-}
+那么落实到算法怎么求呢？我们是不可能用这种暴力方法求解的。
+因为要求是只要大一点点，所以我们应该从右（个位）开始寻找。方法如下：
+1. 先从右向左遍历，如果num[i] > num[i - 1]，说明是升序，继续，直到第一个降序的数字。如果所有数字都是升序，说明到了最大值，如321，那他的next值就是数组翻转过来的最小值。
+2. 找到第一个降续的数字之后，我们以2,3,6,5,4,1为例
+   第一个降续的是3，我们要把3和后边的升序数组里刚刚好比他大一点的数字交换，以保证带来的增幅最小，
+   因为是有序序列，遍历一遍就可以找到这个数字：4
+   此时变为2,4,6,5,3,1
+3. 最后要把i-1到n的数字再排序一下：2,4,1,3,5,6
  */
+public class _031_NextPermutation {
+    public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length == 0 || nums.length == 1) return;
+        if (nums.length == 2) {
+            swap(nums, 0, 1);
+            return;
+        }
+
+        int j = nums.length - 1;
+        while (j > 0 && nums[j - 1] >= nums[j]) {
+            --j;
+        }
+        if (j == 0) {
+            reverse(nums);
+            return;
+        }
+        j = j - 1;
+
+        int i = nums.length - 1;
+        while (i >= 0 && nums[i] <= nums[j]) {
+            --i;
+        }
+
+        swap(nums, i, j);
+        Arrays.sort(nums, j + 1, nums.length);
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    private void reverse(int[] nums) {
+        int[] temp = new int[nums.length];
+        int index = 0;
+        for (int i = nums.length - 1; i >= 0; --i) {
+            temp[index++] = nums[i];
+        }
+        for (int i = 0; i < nums.length; ++i) {
+            nums[i] = temp[i];
+        }
+    }
+}
