@@ -2,7 +2,9 @@ package leet.next;
 
 import util.TreeNode;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  Given a binary tree, return the inorder traversal of its nodes' values.
@@ -17,32 +19,26 @@ import java.util.List;
  return [1,3,2].
 
  Note: Recursive solution is trivial, could you do it iteratively?
+ */
 
+/*
+这还有什么好多说的，赶紧背下来啊
  */
 public class _094_BinaryTreeInorderTraversal {
     public List<Integer> inorderTraversal(TreeNode root) {
-        return null;
-    }
-}
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
 
-
-/*
-非递归解法
-public class Solution {
-    public List < Integer > inorderTraversal(TreeNode root) {
-        List < Integer > res = new ArrayList < > ();
-        Stack < TreeNode > stack = new Stack < > ();
-        TreeNode curr = root;
-        while (curr != null || !stack.isEmpty()) {
-            while (curr != null) {
-                stack.push(curr);
-                curr = curr.left;
+        while (!stack.empty() || node != null) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
             }
-            curr = stack.pop();
-            res.add(curr.val);
-            curr = curr.right;
+            node = stack.pop();
+            list.add(node.val);
+            node = node.right;
         }
-        return res;
+        return list;
     }
 }
- */
