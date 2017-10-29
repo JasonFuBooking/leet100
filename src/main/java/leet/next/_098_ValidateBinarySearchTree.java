@@ -2,6 +2,10 @@ package leet.next;
 
 import util.TreeNode;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 /**
  Given a binary tree, determine if it is a valid binary search tree (BST).
 
@@ -21,70 +25,35 @@ import util.TreeNode;
  2   3
  Binary tree [1,2,3], return false.
  */
-public class _098_ValidateBinarySearchTree {
-    public boolean isValidBST(TreeNode root) {
-        return false;
-    }
-}
-
 
 /*
-Learn one iterative inorder traversal, apply it to multiple tree questions (Java Solution)
-I will show you all how to tackle various tree questions using iterative inorder traversal. First one is the standard iterative inorder traversal using stack. Hope everyone agrees with this solution.
+因为先做了中序非递归的题，这一道就很顺理成章了。
+关键思路：BST的中序遍历是一个升序数组。
+我看最优的解法是非递归中序遍历过程中，顺便判断一下是不是升序。
+我这里用了一个辅助数组。
 
-Question : Binary Tree Inorder Traversal
-
-public List<Integer> inorderTraversal(TreeNode root) {
-    List<Integer> list = new ArrayList<>();
-    if(root == null) return list;
-    Stack<TreeNode> stack = new Stack<>();
-    while(root != null || !stack.empty()){
-        while(root != null){
-            stack.push(root);
-            root = root.left;
-        }
-        root = stack.pop();
-        list.add(root.val);
-        root = root.right;
-
-    }
-    return list;
-}
-Now, we can use this structure to find the Kth smallest element in BST.
-
-Question : Kth Smallest Element in a BST
-
- public int kthSmallest(TreeNode root, int k) {
-     Stack<TreeNode> stack = new Stack<>();
-     while(root != null || !stack.isEmpty()) {
-         while(root != null) {
-             stack.push(root);
-             root = root.left;
-         }
-         root = stack.pop();
-         if(--k == 0) break;
-         root = root.right;
-     }
-     return root.val;
- }
-We can also use this structure to solve BST validation question.
-
-Question : Validate Binary Search Tree
-
-public boolean isValidBST(TreeNode root) {
-   if (root == null) return true;
-   Stack<TreeNode> stack = new Stack<>();
-   TreeNode pre = null;
-   while (root != null || !stack.isEmpty()) {
-      while (root != null) {
-         stack.push(root);
-         root = root.left;
-      }
-      root = stack.pop();
-      if(pre != null && root.val <= pre.val) return false;
-      pre = root;
-      root = root.right;
-   }
-   return true;
-}
  */
+public class _098_ValidateBinarySearchTree {
+    public boolean isValidBST(TreeNode root) {
+        List<TreeNode> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
+        while (node != null || !stack.empty()) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+            node = stack.pop();
+            list.add(node);
+            node = node.right;
+        }
+        boolean isInOrder = true;
+        for (int i = 0; i < list.size() - 1; ++i) {
+            if (list.get(i).val >= list.get(i + 1).val) {
+                isInOrder = false;
+                break;
+            }
+        }
+        return isInOrder;
+    }
+}
