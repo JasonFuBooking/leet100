@@ -2,7 +2,10 @@ package leet.next;
 
 import util.TreeNode;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
@@ -21,33 +24,32 @@ import java.util.List;
      [15,7]
  ]
  */
-public class _102_BinaryTreeLevelOrderTraversal {
-    public List<List<Integer>> levelOrder(TreeNode root) {
-        return null;
-    }
-}
-
 
 /*
-public class Solution {
+借助queue进行层次遍历，这没啥好说的，基础算法
+ */
+public class _102_BinaryTreeLevelOrderTraversal {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        Queue<TreeNode> queue = new LinkedList<TreeNode>();
-        List<List<Integer>> wrapList = new LinkedList<List<Integer>>();
-
-        if(root == null) return wrapList;
-
-        queue.offer(root);
-        while(!queue.isEmpty()){
-            int levelNum = queue.size();
-            List<Integer> subList = new LinkedList<Integer>();
-            for(int i=0; i<levelNum; i++) {
-                if(queue.peek().left != null) queue.offer(queue.peek().left);
-                if(queue.peek().right != null) queue.offer(queue.peek().right);
-                subList.add(queue.poll().val);
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) return result;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            List<Integer> currentLevel = new ArrayList<>();
+            List<TreeNode> nextLevel = new ArrayList<>();
+            while (!queue.isEmpty()) {
+                TreeNode node = queue.poll();
+                currentLevel.add(node.val);
+                if (node.left != null) {
+                    nextLevel.add(node.left);
+                }
+                if (node.right != null) {
+                    nextLevel.add(node.right);
+                }
             }
-            wrapList.add(subList);
+            result.add(currentLevel);
+            queue.addAll(nextLevel);
         }
-        return wrapList;
+        return result;
     }
 }
- */
