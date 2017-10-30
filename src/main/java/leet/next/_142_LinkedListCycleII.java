@@ -10,39 +10,31 @@ import util.ListNode;
  Follow up:
  Can you solve it without using extra space?
  */
-public class _142_LinkedListCycleII {
-    public ListNode detectCycle(ListNode head) {
-        return null;
-    }
-}
 
 /*
-O(n) solution by using two pointers without change anything
-my solution is like this: using two pointers, one of them one step at a time. another pointer each take two steps. Suppose the first meet at step k,the length of the Cycle is r. so..2k-k=nr,k=nr
-Now, the distance between the start node of list and the start node of cycle is s. the distance between the start of list and the first meeting node is k(the pointer which wake one step at a time waked k steps).the distance between the start node of cycle and the first meeting node is m, so...s=k-m,
-s=nr-m=(n-1)r+(r-m),here we takes n = 1..so, using one pointer start from the start node of list, another pointer start from the first meeting node, all of them wake one step at a time, the first time they meeting each other is the start of the cycle.
-
-    ListNode *detectCycle(ListNode *head) {
-    if (head == NULL || head->next == NULL) return NULL;
-
-    ListNode* firstp = head;
-    ListNode* secondp = head;
-    bool isCycle = false;
-
-    while(firstp != NULL && secondp != NULL) {
-        firstp = firstp->next;
-        if (secondp->next == NULL) return NULL;
-        secondp = secondp->next->next;
-        if (firstp == secondp) { isCycle = true; break; }
-    }
-
-    if(!isCycle) return NULL;
-    firstp = head;
-    while( firstp != secondp) {
-        firstp = firstp->next;
-        secondp = secondp->next;
-    }
-
-    return firstp;
-}
+这道题用额外空间就非常简单。
+主要是看看不用额外空间的解法，我觉得还是太有技巧性了，面试的可能性不大：
+还是用fast, slow两个指针，第一次循环找到fast与slow的交点。
+之后再设置一个指针node从head开始，和slow同步向后移动，他们的交点就是环的起点
  */
+public class _142_LinkedListCycleII {
+    public ListNode detectCycle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (slow != null && fast!= null) {
+            slow = slow.next;
+            fast = fast.next;
+            if (fast != null) {
+                fast = fast.next;
+            }
+            if (fast == slow) break;
+        }
+        if (fast == null) return null;
+        ListNode node = head;
+        while (node != slow) {
+            node = node.next;
+            slow = slow.next;
+        }
+        return node;
+    }
+}
