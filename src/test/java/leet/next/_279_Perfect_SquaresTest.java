@@ -1,9 +1,8 @@
 package leet.next;
 
+import leet.unresolve._279_Perfect_Squares;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by jafu on 11/1/17.
