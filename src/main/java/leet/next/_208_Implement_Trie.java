@@ -7,6 +7,11 @@ package leet.next;
  Note:
  You may assume that all inputs are consist of lowercase letters a-z.
  */
+
+/*
+实现一个trie啊。。。天哪真出这道题我就认了。
+这里有详细解说： https://leetcode.com/problems/implement-trie-prefix-tree/solution/
+ */
 public class _208_Implement_Trie {
 }
 class Trie {

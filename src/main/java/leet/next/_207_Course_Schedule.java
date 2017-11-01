@@ -31,10 +31,8 @@ import java.util.Queue;
  */
 
 /*
-其实就是判断无向图是否存在环。。。
+其实就是判断无向图是否存在环。。。这个考的可能性太小了。。。
 如果存在回路，则必存在一个子图，是一个环路。环路中所有顶点的度>=2。
-
-
  */
 public class _207_Course_Schedule {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
