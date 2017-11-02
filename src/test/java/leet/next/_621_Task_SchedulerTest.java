@@ -1,9 +1,8 @@
 package leet.next;
 
+import leet.unresolve._621_Task_Scheduler;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by jafu on 11/2/17.
