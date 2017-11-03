@@ -46,7 +46,6 @@ public class _394_Decode_String {
         Stack<Character> stack = new Stack<>();
 
         while (s.length() > 0) {
-            int count = 0, end = 0;
             int k = 0;
             while (k < s.length() && !Character.isDigit(s.charAt(k))) {
                 buffer.append(s.charAt(k));
@@ -54,9 +53,9 @@ public class _394_Decode_String {
             }
             if (k == s.length()) break;
 
-            end = k + 1;
+            int end = k + 1;
             while (end < s.length() && Character.isDigit(s.charAt(end))) ++end;
-            count = Integer.valueOf(s.substring(k, end));
+            int count = Integer.valueOf(s.substring(k, end));
 
             int i = end, j = i;
             while (j < s.length()) {
