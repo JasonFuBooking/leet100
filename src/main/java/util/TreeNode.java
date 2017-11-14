@@ -49,4 +49,9 @@ public class TreeNode {
         node1right.right = node2right;
         return node1;
     }
+
+    @Override
+    public String toString() {
+        return "val=" + val;
+    }
 }
